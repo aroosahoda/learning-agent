@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://learning-agent.local/schemas/review_queue.schema.json",
+  "title": "review-queue.json file",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "cards"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "$ref": "fsrs_card.schema.json"
+      }
+    }
+  }
+}

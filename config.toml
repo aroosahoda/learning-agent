@@ -1,0 +1,21 @@
+# Learning Agent configuration (Phase 1.4). Contains NO secrets: never put API keys here.
+
+[mastery]
+pass_threshold = 0.85            # posterior needed to pass a node (architecture 9.3)
+
+[probe]
+min_questions_per_strand = 2
+max_questions_per_strand = 4
+
+[fsrs]
+desired_retention = 0.90
+maximum_interval_days = 365
+
+[research]
+min_independent_sources = 2
+source_allowlist = []            # bare hostnames, e.g. "en.wikipedia.org". Empty = ask before fetching any domain
+ttl_days_time_sensitive = 7
+ttl_days_default = 90
+
+[logging]
+max_event_bytes = 16384

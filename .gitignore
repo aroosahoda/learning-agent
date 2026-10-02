@@ -1,0 +1,10 @@
+# Learner data is personal: never commit it
+.alvar/
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.env

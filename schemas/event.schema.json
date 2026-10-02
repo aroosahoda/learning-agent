@@ -1,0 +1,361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://learning-agent.local/schemas/event.schema.json",
+  "title": "Event log record (one JSONL line)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "t",
+    "event",
+    "session",
+    "seq"
+  ],
+  "properties": {
+    "t": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?Z$",
+      "maxLength": 32
+    },
+    "event": {
+      "enum": [
+        "session_started",
+        "session_resumed",
+        "state_transition",
+        "checkpoint",
+        "quiz_answered",
+        "source_fetched",
+        "claim_verified",
+        "dag_overlay_insert",
+        "srs_card_scheduled",
+        "session_ended"
+      ]
+    },
+    "session": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}-[a-z0-9-]{1,60}-[0-9a-f]{6}$"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "from_seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "from": {
+      "enum": [
+        "GREET",
+        "PROBE",
+        "PLAN",
+        "TEACH",
+        "QUIZ",
+        "ANALYZE",
+        "REMEDIATE",
+        "SRS_REVIEW",
+        "WRAP"
+      ]
+    },
+    "to": {
+      "enum": [
+        "GREET",
+        "PROBE",
+        "PLAN",
+        "TEACH",
+        "QUIZ",
+        "ANALYZE",
+        "REMEDIATE",
+        "SRS_REVIEW",
+        "WRAP"
+      ]
+    },
+    "state": {
+      "enum": [
+        "GREET",
+        "PROBE",
+        "PLAN",
+        "TEACH",
+        "QUIZ",
+        "ANALYZE",
+        "REMEDIATE",
+        "SRS_REVIEW",
+        "WRAP"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "node": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$",
+      "maxLength": 100
+    },
+    "parent": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$",
+      "maxLength": 100
+    },
+    "question_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "correct": {
+      "type": "boolean"
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "low"
+      ]
+    },
+    "misconception": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "maxLength": 64
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "url": {
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "^https?://"
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "verdict": {
+      "enum": [
+        "confirmed",
+        "qualified",
+        "contradicted",
+        "unknown"
+      ]
+    },
+    "citations": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "maxLength": 2048,
+        "pattern": "^https?://"
+      }
+    },
+    "rating": {
+      "enum": [
+        "again",
+        "hard",
+        "good",
+        "easy"
+      ]
+    },
+    "due_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?Z$",
+      "maxLength": 32
+    },
+    "reason": {
+      "enum": [
+        "completed",
+        "abandoned",
+        "interrupted"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "session_started"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "topic"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "session_resumed"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "from_seq"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "state_transition"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "from",
+          "to"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "checkpoint"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "state"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "quiz_answered"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "node",
+          "correct",
+          "confidence"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "source_fetched"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "url",
+          "content_hash"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "claim_verified"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "claim",
+          "verdict",
+          "citations"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "dag_overlay_insert"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "node",
+          "parent"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "srs_card_scheduled"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "node",
+          "rating",
+          "due_at"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "session_ended"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "required": [
+          "reason"
+        ]
+      }
+    }
+  ]
+}

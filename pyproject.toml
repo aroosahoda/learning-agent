@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "learning-agent"
+version = "0.1.0"
+description = "Agentic AI tutor: local-first, verified, mastery-gated learning"
+requires-python = ">=3.11"
+dependencies = ["jsonschema>=4.21,<5", "filelock>=3.13,<4"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff", "mypy", "bandit", "pip-audit", "types-jsonschema"]
+
+[tool.setuptools.packages.find]
+include = ["modules*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "SIM"]
+ignore = ["S101"]          # assert is fine in tests
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "B017"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["modules"]

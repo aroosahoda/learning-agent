@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://learning-agent.local/schemas/node_contract.schema.json",
+  "title": "DAG node contract (architecture 7.1)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "node_id",
+    "label",
+    "prerequisites",
+    "teaches",
+    "misconception_tags",
+    "quiz_blueprint",
+    "sources"
+  ],
+  "properties": {
+    "node_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$",
+      "maxLength": 100
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "prerequisites": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 50,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$",
+        "maxLength": 100
+      }
+    },
+    "teaches": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300
+      }
+    },
+    "misconception_tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "maxLength": 64
+      }
+    },
+    "quiz_blueprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recall",
+        "application"
+      ],
+      "properties": {
+        "recall": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "application": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim",
+          "verdict",
+          "citation"
+        ],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "verdict": {
+            "enum": [
+              "confirmed",
+              "qualified",
+              "contradicted",
+              "unknown"
+            ]
+          },
+          "citation": {
+            "type": "string",
+            "maxLength": 2048
+          }
+        }
+      }
+    }
+  }
+}

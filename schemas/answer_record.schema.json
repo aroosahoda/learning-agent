@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://learning-agent.local/schemas/answer_record.schema.json",
+  "title": "Persisted quiz answer (architecture 9.2)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "question_id",
+    "node_id",
+    "selected",
+    "correct",
+    "confidence",
+    "response_time_ms",
+    "misconception_tag"
+  ],
+  "properties": {
+    "question_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "node_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$",
+      "maxLength": 100
+    },
+    "selected": {
+      "type": "string",
+      "pattern": "^[A-F]$"
+    },
+    "correct": {
+      "type": "boolean"
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "low"
+      ]
+    },
+    "response_time_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3600000
+    },
+    "misconception_tag": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "maxLength": 64
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}
