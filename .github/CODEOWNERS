@@ -1,7 +1,6 @@
-# Replace @dev-a / @dev-b with real GitHub usernames.
-/modules/state/   @dev-a
-/schemas/         @dev-b @dev-a
-/modules/config.py @dev-b
-/config.toml      @dev-b
-/.github/         @dev-b
-/docs/            @dev-a @dev-b
+/modules/state/   @aroosahoda
+/schemas/         @ctrl-Nix @aroosahoda
+/modules/config.py @ctrl-Nix
+/config.toml      @ctrl-Nix
+/.github/         @ctrl-Nix
+/docs/            @aroosahoda @ctrl-Nix
