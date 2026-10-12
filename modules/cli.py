@@ -9,7 +9,7 @@ from pathlib import Path
 from modules.config import ConfigError, load_config
 from modules.schema_check import SchemaError, schema_names, validate
 from modules.state.events import CorruptLogError, read_events
-from modules.state.paths import AlvarPaths
+from modules.state.paths import AlvarPaths, SessionLockError
 from modules.state.session import Session, SessionError, replay
 
 
@@ -70,7 +70,7 @@ def main(argv: list[str] | None = None) -> int:
                 return 1
             sess = Session.resume(paths, sid, cfg)
             print(f"resumed {sid} at state {sess.snapshot.state.value} (seq {sess.snapshot.last_seq})")
-    except (ConfigError, SessionError, CorruptLogError, ValueError, OSError) as e:
+    except (ConfigError, SessionError, SessionLockError, CorruptLogError, ValueError, OSError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
     return 0

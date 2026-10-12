@@ -11,7 +11,7 @@ from typing import Any
 from modules.config import Config
 from modules.state.atomic import atomic_write_text
 from modules.state.events import CorruptLogError, EventLog, read_events
-from modules.state.paths import AlvarPaths, slugify
+from modules.state.paths import AlvarPaths, SessionLock, slugify
 from modules.state.states import State
 
 
@@ -51,6 +51,9 @@ class Session:
     def __init__(self, paths: AlvarPaths, snapshot: SessionSnapshot, config: Config) -> None:
         self.paths, self.snapshot, self.config = paths, snapshot, config
         self.log = EventLog(paths, snapshot.session_id, config.logging.max_event_bytes)
+
+    def session_lock(self, timeout: float = 0.0) -> SessionLock:
+        return self.paths.session_lock(self.snapshot.session_id, timeout=timeout)
 
     @classmethod
     def start(cls, paths: AlvarPaths, topic: str, config: Config) -> Session:
